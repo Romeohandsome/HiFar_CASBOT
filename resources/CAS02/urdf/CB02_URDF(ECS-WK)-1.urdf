@@ -37,7 +37,7 @@
           rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -45,7 +45,7 @@
         <mesh
           filename="../meshes/base_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <link
     name="left_leg_pelvic_pitch_link">
@@ -77,7 +77,7 @@
           rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -85,7 +85,7 @@
         <mesh
           filename="../meshes/left_leg_pelvic_pitch_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint
     name="left_leg_pelvic_pitch_joint"
@@ -251,13 +251,25 @@
           rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
           filename="../meshes/left_leg_knee_pitch_link.STL" />
+      </geometry>
+    </collision> -->
+    <collision>
+      <origin xyz="0.0 0.001 -0.18" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.07 0.19"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.02 0.00 -0.35" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.03 0.06 0.1"/>
       </geometry>
     </collision>
   </link>
@@ -309,7 +321,7 @@
           rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -317,7 +329,7 @@
         <mesh
           filename="../meshes/left_leg_ankle_pitch_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint
     name="left_leg_ankle_pitch_joint"
@@ -367,13 +379,21 @@
           rgba="0.79216 0.81961 0.93333 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
           filename="../meshes/left_leg_ankle_roll_link.STL" />
+      </geometry>
+    </collision> -->
+    <collision>
+      <origin
+        xyz="0.03 0 -0.05"
+        rpy="0 0 0" />
+      <geometry>
+        <box size="0.23 0.08 0.02" />
       </geometry>
     </collision>
   </link>
@@ -425,7 +445,7 @@
           rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -433,7 +453,7 @@
         <mesh
           filename="../meshes/right_leg_pelvic_pitch_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint
     name="right_leg_pelvic_pitch_joint"
@@ -599,13 +619,25 @@
           rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
           filename="../meshes/right_leg_knee_pitch_link.STL" />
+      </geometry>
+    </collision> -->
+    <collision>
+      <origin xyz="0.0 -0.001 -0.18" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.07 0.19"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.02 0.00 -0.35" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.03 0.06 0.1"/>
       </geometry>
     </collision>
   </link>
@@ -657,7 +689,7 @@
           rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -665,7 +697,7 @@
         <mesh
           filename="../meshes/right_leg_ankle_pitch_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint
     name="right_leg_ankle_pitch_joint"
@@ -715,13 +747,21 @@
           rgba="0.79216 0.81961 0.93333 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
           filename="../meshes/right_leg_ankle_roll_link.STL" />
+      </geometry>
+    </collision> -->
+    <collision>
+      <origin
+        xyz="0.03 0 -0.05"
+        rpy="0 0 0" />
+      <geometry>
+        <box size="0.23 0.08 0.02" />
       </geometry>
     </collision>
   </link>
@@ -773,13 +813,21 @@
           rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
           filename="../meshes/waist_yaw_link.STL" />
+      </geometry>
+    </collision> -->
+    <collision>
+      <origin
+        xyz="0.0 0 0.12"
+        rpy="0 0 0" />
+      <geometry>
+        <box size="0.15 0.2 0.3" />
       </geometry>
     </collision>
   </link>
@@ -901,7 +949,7 @@
   </link>
   <joint
     name="head_pitch_joint"
-    type="revolute">
+    type="fixed">
     <origin
       xyz="0 0 0.046"
       rpy="0 0 0" />
@@ -947,7 +995,7 @@
           rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -955,7 +1003,7 @@
         <mesh
           filename="../meshes/left_shoulder_pitch_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint
     name="left_shoulder_pitch_joint"
@@ -1020,7 +1068,7 @@
     type="revolute">
     <origin
       xyz="0 0.057 0"
-      rpy="0 0 0" />
+      rpy="0.1745 0 0" />
     <parent
       link="left_shoulder_pitch_link" />
     <child
@@ -1191,7 +1239,7 @@
   </link>
   <joint
     name="left_wrist_yaw_joint"
-    type="revolute">
+    type="fixed">
     <origin
       xyz="0 0 -0.131"
       rpy="0 0 0" />
@@ -1295,7 +1343,7 @@
           rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -1303,7 +1351,7 @@
         <mesh
           filename="../meshes/right_shoulder_pitch_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint
     name="right_shoulder_pitch_joint"
@@ -1368,7 +1416,7 @@
     type="revolute">
     <origin
       xyz="0 -0.057 0"
-      rpy="0 0 0" />
+      rpy="-0.1745 0 0" />
     <parent
       link="right_shoulder_pitch_link" />
     <child
@@ -1539,7 +1587,7 @@
   </link>
   <joint
     name="right_wrist_yaw_joint"
-    type="revolute">
+    type="fixed">
     <origin
       xyz="0 0 -0.128"
       rpy="0 0 0" />

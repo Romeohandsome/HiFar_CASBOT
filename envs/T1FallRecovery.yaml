@@ -1,6 +1,6 @@
 basic:
   checkpoint: null # set to -1 to load last saved model
-  headless: true # set to true to run without rendering
+  headless: false # set to true to run without rendering
   max_iterations: 60000 # set the maximum number of learning iterations to train for
   sim_device: "cuda:0" # device for physics simulation
   rl_device: "cuda:0" # device for the RL algorithm
@@ -8,7 +8,7 @@ basic:
   description: ""
 
 env:
-  num_envs: 2048
+  num_envs: 1
   num_observations: 36
   num_privileged_obs: 14 # if not None a priviledge_obs_buf will be returned by step() (critic obs for assymetric training). None is returned otherwise 
   num_actions: 10
@@ -138,8 +138,8 @@ init_state:
 
 control:
   drive_mode: 1 # see GymDofDriveModeFlags (0 is none, 1 is pos tgt, 2 is vel tgt, 3 effort)
-  stiffness: {"Waist": 200., "Hip": 200., "Knee": 200., "Ankle": 100., "Shoulder": 200., "Elbow": 200., "Head": 100.} # [N*m/rad]
-  damping: {"Waist": 2., "Hip": 2., "Knee": 2., "Ankle": 1., "Shoulder": 2., "Elbow": 2., "Head": 1.} # [N*m*s/rad]
+  stiffness: {"Waist": 0., "Hip": 0., "Knee": 0., "Ankle": 0., "Shoulder": 0., "Elbow": 0., "Head": 0.} # [N*m/rad]
+  damping: {"Waist": 0., "Hip": 0., "Knee": 0., "Ankle": 0., "Shoulder": 0., "Elbow": 0., "Head": 0.} # [N*m*s/rad]
   action_scale: 1.
   decimation: 5
   effective_ids: [2, 5, 6, 9, 11, 14, 15, 17, 20, 21]

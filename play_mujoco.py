@@ -20,11 +20,12 @@ class MujocoRunner:
             self.cfg["env"]["num_actions"], self.cfg["env"]["num_observations"], self.cfg["runner"]["num_stack"], self.cfg["env"]["num_privileged_obs"], self.cfg["algorithm"]["num_embedding"]
         )
         self.load()
+        #self.mj_model = mujoco.MjModel.from_xml_path("resources/T1/T1_serial_collision.xml")
         self.mj_model = mujoco.MjModel.from_xml_path("resources/T1/T1_serial_collision.xml")
         self.mj_model.opt.timestep = self.cfg["sim"]["dt"] / self.cfg["sim"]["substeps"]
         self.mj_data = mujoco.MjData(self.mj_model)
         mujoco.mj_resetData(self.mj_model, self.mj_data)
-        self.mj_data.qpos = np.array([0, 0, 0.25, 0.7071, 0, -0.7071, 0, 0.2, -1.35, 0, -0.5, 0.2, 1.35, 0, 0.5, 0, -0.2, 0, 0, 0.4, -0.25, 0, -0.2, 0, 0, 0.4, -0.25, 0], dtype=np.float32)
+        self.mj_data.qpos = np.array([0, 0, 0.25, 0.7071, 0, 0.7071, 0, 0.2, -1.35, 0, -0.5, 0.2, 1.35, 0, 0.5, 0, -0.2, 0, 0, 0.4, -0.25, 0, -0.2, 0, 0, 0.4, -0.25, 0], dtype=np.float32)
         mujoco.mj_forward(self.mj_model, self.mj_data)
 
     def get_args(self):

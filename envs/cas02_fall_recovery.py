@@ -459,20 +459,86 @@ class Cas02FallRecovery(BaseTask):
             self.heel_pos[:, i, :] = self.feet_pos[:, i, :] + quat_rotate(self.feet_quat[:, i, :], heel_relative_pos)
             self.heel_contact[:, i] = self.heel_pos[:, i, 2] - self.terrain.terrain_heights(self.heel_pos[:, i, :]) < 0.01
 
+    # def check_termination(self):
+    #     """Check if environments need to be reset"""
+    #     self.reset_buf = torch.any(torch.norm(self.contact_forces[:, self.termination_contact_indices, :], dim=-1) > 1.0, dim=1)
+    #     self.reset_buf |= self.root_states[:, 7:13].square().sum(dim=-1) > self.cfg["rewards"]["terminate_vel"]
+    #     self.low_height_count[torch.where(self.root_states[:, 2] - self.terrain.terrain_heights(self.base_pos) < self.cfg["rewards"]["terminate_height"])] += 1
+    #     low_height = self.low_height_count > 100
+    #     upside_down = self.projected_gravity[:, 2] > 0.9
+    #     side_roll = torch.abs(self.projected_gravity[:, 1]) > 0.8
+    #     self.reset_buf |= low_height
+    #     self.reset_buf |= upside_down
+    #     if not self.cfg["env"]["allow_side_roll"]:
+    #         self.reset_buf |= side_roll
+    #     self.time_out_buf = self.episode_length_buf > np.ceil(self.cfg["rewards"]["episode_length_s"] / self.dt)
+    #     self.reset_buf |= self.time_out_buf
     def check_termination(self):
-        """Check if environments need to be reset"""
-        self.reset_buf = torch.any(torch.norm(self.contact_forces[:, self.termination_contact_indices, :], dim=-1) > 1.0, dim=1)
-        self.reset_buf |= self.root_states[:, 7:13].square().sum(dim=-1) > self.cfg["rewards"]["terminate_vel"]
-        self.low_height_count[torch.where(self.root_states[:, 2] - self.terrain.terrain_heights(self.base_pos) < self.cfg["rewards"]["terminate_height"])] += 1
-        low_height = self.low_height_count > 100
+        """Check if environments need to be reset and print the reason"""
+        # 初始化 reset_buf 为 False
+        self.reset_buf = torch.zeros(self.num_envs, dtype=torch.bool, device=self.device)
+
+        # 1. 非法接触（如手、背触地）
+        contact_condition = torch.any(
+            torch.norm(self.contact_forces[:, self.termination_contact_indices, :], dim=-1) > 1.0,
+            dim=1
+        )
+        self.reset_buf |= contact_condition
+
+        # 2. 速度过大（飞天或抖动）
+        vel_sqr_sum = self.root_states[:, 7:13].square().sum(dim=-1)
+        vel_condition = vel_sqr_sum > self.cfg["rewards"]["terminate_vel"]
+        self.reset_buf |= vel_condition
+
+        # 3. 持续高度过低
+        base_height = self.root_states[:, 2] - self.terrain.terrain_heights(self.base_pos)
+        low_height_mask = base_height < self.cfg["rewards"]["terminate_height"]
+        self.low_height_count[low_height_mask] += 1
+        low_height_condition = self.low_height_count > 100
+        self.reset_buf |= low_height_condition
+
+        # 4. 倒立（肚皮朝天）
         upside_down = self.projected_gravity[:, 2] > 0.9
-        side_roll = torch.abs(self.projected_gravity[:, 1]) > 0.8
-        self.reset_buf |= low_height
         self.reset_buf |= upside_down
+
+        # 5. 严重侧倾
+        side_roll = torch.abs(self.projected_gravity[:, 1]) > 0.8
+        side_roll_condition = side_roll
         if not self.cfg["env"]["allow_side_roll"]:
-            self.reset_buf |= side_roll
+            self.reset_buf |= side_roll_condition
+
+        # 6. 超时
         self.time_out_buf = self.episode_length_buf > np.ceil(self.cfg["rewards"]["episode_length_s"] / self.dt)
         self.reset_buf |= self.time_out_buf
+
+        # 🔔 打印终止原因（只在有 reset 发生时打印）
+        if torch.any(self.reset_buf):
+            print(f"\n[Termination Check] {torch.sum(self.reset_buf).item()} environments will be reset. Reasons:")
+
+            if torch.any(contact_condition):
+                print(f"  🚫 Illegal Contact: {torch.sum(contact_condition).item()} envs (e.g., hand/back touched ground)")
+
+            if torch.any(vel_condition):
+                max_vel = torch.max(vel_sqr_sum[vel_condition]).item()
+                print(f"  🚫 High Velocity: {torch.sum(vel_condition).item()} envs (max vel^2 = {max_vel:.2f})")
+
+            if torch.any(low_height_condition):
+                count = torch.sum(low_height_condition).item()
+                min_height = torch.min(base_height[low_height_mask]).item() if torch.any(low_height_mask) else 0
+                print(f"  🚫 Too Low: {count} envs (min height = {min_height:.3f}m, count > 100 frames)")
+
+            if torch.any(upside_down):
+                print(f"  🚫 Upside Down: {torch.sum(upside_down).item()} envs (projected gravity z > 0.9)")
+
+            if not self.cfg["env"]["allow_side_roll"] and torch.any(side_roll_condition):
+                print(f"  🚫 Side Roll: {torch.sum(side_roll_condition).item()} envs (abs(proj_grav y) > 0.8)")
+
+            if torch.any(self.time_out_buf):
+                print(f"  ⏱️  Timeout: {torch.sum(self.time_out_buf).item()} envs (episode length > {self.time_out_buf.shape[0]} steps)")
+
+            # 可选：打印第一个被 reset 的环境索引（方便调试）
+            first_reset_idx = torch.where(self.reset_buf)[0][0].item()
+            print(f"  💡 First reset env index: {first_reset_idx}")
 
     def compute_reward(self):
         """Compute rewards

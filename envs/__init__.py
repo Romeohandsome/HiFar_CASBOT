@@ -1,2 +1,3 @@
 from envs.t1_fall_recovery import T1FallRecovery
 from envs.t1_fall_recovery_random import T1FallRecoveryRandom
+from envs.cas02_fall_recovery import Cas02FallRecovery
