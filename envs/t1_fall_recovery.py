@@ -49,6 +49,9 @@ class T1FallRecovery(BaseTask):
         self.num_dofs = self.gym.get_asset_dof_count(robot_asset)
         self.num_bodies = self.gym.get_asset_rigid_body_count(robot_asset)
         self.dof_names = self.gym.get_asset_dof_names(robot_asset)
+        print(f"Number of DOFs: {self.num_dofs}")
+        print(f"Number of Bodies: {self.num_bodies}")
+        print(f"DOF Names: {self.dof_names}")
 
         dof_props_asset = self.gym.get_asset_dof_properties(robot_asset)
         self.dof_pos_limits = torch.zeros(self.num_dofs, 2, dtype=torch.float, device=self.device, requires_grad=False)
